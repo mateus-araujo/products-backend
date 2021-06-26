@@ -39,8 +39,10 @@ class StoreProductRequest extends BaseRequest
             'name.required' => 'Product name is required',
             'name.unique' => 'There\'s already a product with this name',
             'name.max' => 'Product name exceeds the maximum length',
-            'price.required' => 'Product price is required',
             'price.min' => 'Product min price is 0',
+            'price.numeric' => 'Product price must be numeric',
+            'price.required' => 'Product price is required',
+            'quantity.integer' => 'Product quantity must be integer',
             'quantity.min' => 'Product min quantity is 0',
         ];
     }

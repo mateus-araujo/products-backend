@@ -28,6 +28,14 @@ class Product extends Model
         'price' => 'float'
     ];
 
+    /**
+     * Get the history from product.
+     */
+    public function history()
+    {
+        return $this->hasMany(ProductHistory::class);
+    }
+
     protected static function booted()
     {
         Product::observe(ProductObserver::class);

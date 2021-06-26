@@ -17,4 +17,17 @@ class ProductObserver
     {
         $product->id = Uuid::uuid4()->toString();
     }
+
+    /**
+     * Handle the Product "updated" event.
+     *
+     * @param  \App\Models\Product  $product
+     * @return void
+     */
+    public function updated(Product $product)
+    {
+        $product->history()->create([
+            'quantity' => $product->quantity,
+        ]);
+    }
 }

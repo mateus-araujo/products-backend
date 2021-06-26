@@ -47,12 +47,12 @@ class UpdateProductRequest extends BaseRequest
     public function messages(): array
     {
         return [
-            'name.required' => 'Product name is required',
             'name.unique' => 'There\'s already a product with this name',
             'name.max' => 'Product name exceeds the maximum length',
-            'price.required' => 'Product price is required',
+            'price.numeric' => 'Product price must be numeric',
             'price.min' => 'Product min price is 0',
             'quantity.min' => 'Product min quantity is 0',
+            'quantity.integer' => 'Product quantity must be integer',
         ];
     }
 }
