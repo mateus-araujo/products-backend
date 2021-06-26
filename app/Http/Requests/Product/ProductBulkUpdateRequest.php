@@ -28,17 +28,8 @@ class ProductBulkUpdateRequest extends BaseRequest
     {
         return [
             'products' => 'required|array',
-            'products.*.id' => 'required|string',
-            'products.*.name' => [
-                'string',
-                'max:255',
-                Rule::unique('products')
-                    ->where(
-                        function (Builder $query)  {
-                            $query->where('id', '!=', $this->route('product')->id);
-                        }
-                    ),
-            ],
+            'products.*.id' => 'required|string|exists:products,id',
+            'products.*.name' => 'string|max:255',
             'products.*.price' => 'numeric|min:0',
             'products.*.quantity' => 'integer|min:0',
         ];
@@ -52,6 +43,7 @@ class ProductBulkUpdateRequest extends BaseRequest
         return [
             'products.array' => 'products must be an array',
             'products.*.id.required' => 'Product id is required',
+            'products.*.id.exists' => 'Product id not found',
             'products.*.name.unique' => 'There\'s already a product with this name',
             'products.*.name.max' => 'Product name exceeds the maximum length',
             'products.*.price.numeric' => 'Product price must be numeric',

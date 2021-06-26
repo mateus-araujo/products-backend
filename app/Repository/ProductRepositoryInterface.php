@@ -4,6 +4,14 @@ namespace App\Repository;
 
 interface ProductRepositoryInterface extends EloquentRepositoryInterface {
     /**
+     * Get Product history
+     *
+     * @param string $productId
+     * @return \Illuminate\Support\Collection $products
+     */
+    public function history(string $productId);
+
+    /**
      * Bulk Store of Products
      *
      * @param array $payload

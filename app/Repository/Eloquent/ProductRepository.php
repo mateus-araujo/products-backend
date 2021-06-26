@@ -3,7 +3,6 @@
 namespace App\Repository\Eloquent;
 
 use App\Models\Product;
-use App\Models\User;
 use App\Repository\ProductRepositoryInterface;
 use Ramsey\Uuid\Uuid;
 
@@ -22,6 +21,19 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
     public function __construct(Product $model)
     {
         $this->model = $model;
+    }
+
+    /**
+     * Get Product history
+     *
+     * @param string $productId
+     * @return \Illuminate\Support\Collection $products
+     */
+    public function history(string $productId) {
+        $product = $this->findById($productId);
+        $history = $product->history()->get();
+
+        return $history;
     }
 
     /**
@@ -59,14 +71,22 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
         $collection = collect($payload);
 
         $products = $collection->map(function ($product) {
-            $product = new Product([
+            $newProduct = new Product([
                 'id' => $product['id'],
                 'name' => $product['name'],
                 'price' => $product['price'],
                 'quantity' => $product['quantity'],
             ]);
 
-            return $product;
+            $product = $this->findById($product['id']);
+
+            if ($product->quantity !== $newProduct->quantity) {
+                $product->history()->create([
+                    'quantity' => $newProduct->quantity,
+                ]);
+            }
+
+            return $newProduct;
         });
 
         $this->model->upsert(

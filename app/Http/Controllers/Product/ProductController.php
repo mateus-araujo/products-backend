@@ -80,6 +80,19 @@ class ProductController extends Controller
     }
 
     /**
+     * Display product history.
+     *
+     * @param string  $product
+     * @return \Illuminate\Http\Response
+     */
+    public function history(string $id)
+    {
+        $history = $this->productRepository->history($id);
+
+        return response()->json($history, 200);
+    }
+
+    /**
      * Update the specified resource in storage.
      *
      * @param  \App\Http\Requests\Product\ProductUpdateRequest t  $request
