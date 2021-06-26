@@ -7,7 +7,7 @@ use App\Models\Product;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Validation\Rule;
 
-class UpdateProductRequest extends BaseRequest
+class ProductBulkUpdateRequest extends BaseRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,7 +27,10 @@ class UpdateProductRequest extends BaseRequest
     public function rules()
     {
         return [
-            'name' => [
+            'products' => 'required|array',
+            'products.*.id' => 'required|string',
+            'products.*.name' => [
+                'string',
                 'max:255',
                 Rule::unique('products')
                     ->where(
@@ -36,8 +39,8 @@ class UpdateProductRequest extends BaseRequest
                         }
                     ),
             ],
-            'price' => 'numeric|min:0',
-            'quantity' => 'integer|min:0',
+            'products.*.price' => 'numeric|min:0',
+            'products.*.quantity' => 'integer|min:0',
         ];
     }
 
@@ -47,12 +50,14 @@ class UpdateProductRequest extends BaseRequest
     public function messages(): array
     {
         return [
-            'name.unique' => 'There\'s already a product with this name',
-            'name.max' => 'Product name exceeds the maximum length',
-            'price.numeric' => 'Product price must be numeric',
-            'price.min' => 'Product min price is 0',
-            'quantity.min' => 'Product min quantity is 0',
-            'quantity.integer' => 'Product quantity must be integer',
+            'products.array' => 'products must be an array',
+            'products.*.id.required' => 'Product id is required',
+            'products.*.name.unique' => 'There\'s already a product with this name',
+            'products.*.name.max' => 'Product name exceeds the maximum length',
+            'products.*.price.numeric' => 'Product price must be numeric',
+            'products.*.price.min' => 'Product min price is 0',
+            'products.*.quantity.min' => 'Product min quantity is 0',
+            'products.*.quantity.integer' => 'Product quantity must be integer',
         ];
     }
 }

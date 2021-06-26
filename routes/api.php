@@ -22,3 +22,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::apiResource('product', ProductController::class)->except(['index']);
 Route::apiResource('products', ProductController::class)->only(['index']);
+
+Route::post('products/bulk/create', [ProductController::class, 'bulkStore']);
+Route::post('products/bulk/update', [ProductController::class, 'bulkUpdate']);

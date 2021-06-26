@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Product;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Product\StoreProductRequest;
-use App\Http\Requests\Product\UpdateProductRequest;
+use App\Http\Requests\Product\ProductBulkStoreRequest;
+use App\Http\Requests\Product\ProductBulkUpdateRequest;
+use App\Http\Requests\Product\ProductStoreRequest;
+use App\Http\Requests\Product\ProductUpdateRequest;
 use App\Http\Resources\ProductCollection;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
@@ -29,22 +31,38 @@ class ProductController extends Controller
         $products = $this->productRepository->all();
         $collection = ProductCollection::make($products);
 
-        // ProductResource
         return response()->json($collection, 200);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\Product\StoreProductRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreProductRequest $request)
+    public function store(ProductStoreRequest $request)
     {
         $product = $this->productRepository->create($request->all());
         $resource = ProductResource::make($product->fresh());
 
         return response()->json($resource->resolve(), 201);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\ProductBulkStoreRequest  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function bulkStore(ProductBulkStoreRequest $request)
+    {
+        $products = $this->productRepository->bulkStore(
+            $request->input('products')
+        );
+
+        $collection = ProductCollection::make($products);
+
+        return response()->json($collection, 201);
     }
 
     /**
@@ -64,15 +82,32 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\Product\ProductUpdateRequest t  $request
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateProductRequest $request, Product $product)
+    public function update(ProductUpdateRequest $request, Product $product)
     {
         $product = $this->productRepository->update($product->id, $request->all());
 
         return response()->json($product, 200);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\ProductBulkUpdateRequest  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function bulkUpdate(ProductBulkUpdateRequest $request)
+    {
+        $products = $this->productRepository->bulkUpdate(
+            $request->input('products')
+        );
+
+        $collection = ProductCollection::make($products);
+
+        return response()->json($collection, 201);
     }
 
     /**
