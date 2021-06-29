@@ -43,9 +43,8 @@ class ProductController extends Controller
     public function store(ProductStoreRequest $request)
     {
         $product = $this->productRepository->create($request->all());
-        $resource = ProductResource::make($product->fresh());
 
-        return response()->json($resource->resolve(), 201);
+        return response()->json($product, 201);
     }
 
     /**
