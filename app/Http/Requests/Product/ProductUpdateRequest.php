@@ -34,7 +34,7 @@ class ProductUpdateRequest extends BaseRequest
                         function (Builder $query)  {
                             $query->where('id', '!=', $this->route('product')->id);
                         }
-                    ),
+                    )->whereNull('deleted_at'),
             ],
             'price' => 'numeric|min:0',
             'quantity' => 'integer|min:0',

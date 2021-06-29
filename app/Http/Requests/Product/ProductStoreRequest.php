@@ -24,7 +24,7 @@ class ProductStoreRequest extends BaseRequest
     public function rules()
     {
         return [
-            'name' => 'required|string|unique:products|max:255',
+            'name' => 'required|string|unique:products,deleted_at,NULL|max:255',
             'price' => 'required|numeric|min:0',
             'quantity' => 'integer|min:0',
         ];
